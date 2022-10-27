@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage,TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage,TextInput, Button, Alert } from 'react-native';
 import  Navigation from './components/Navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -16,6 +16,7 @@ const App = () =>{
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [isLoggedIn,setIsLoggedIn] = React.useState(false);
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
+  const [tempCode, setTempCode] = React.useState(null);
 
    if (isFirstLaunch == true){
 return(
@@ -54,6 +55,48 @@ return(
             )
           }}
         />        
+      
+      <TextInput
+          value={tempCode}
+          onChangeText={setTempCode} 
+          style={styles.input2}  
+          placeholderTextColor='#4251f5' 
+          placeholder='Enter Code'>          
+        </TextInput>
+        <Button
+          title='Verify'
+          style={styles.button}
+          onPress={async()=>{
+            console.log('Button 2 was pressed')
+
+
+            const loginResponse=await fetch(
+              'https://dev.stedi.me/twofactorlogin',
+              {
+
+              method:'POST',
+              headers:{
+                'content-type' : 'application/text'
+              },
+              body:JSON.stringify({
+                phoneNumber,
+                oneTimePassword:tempCode
+              })
+
+            }
+            )
+            console.log(loginResponse.status)
+
+            if(loginResponse.status == 200){
+              const sessionToken = await loginResponse.text();
+              console.log('Session Token', sessionToken)
+              setIsLoggedIn(true);
+            }
+            else{
+              Alert.alert('Warning', 'An invalid Code was entered.')
+            }
+          }}
+        />
       </View>
     )
   }
@@ -74,6 +117,13 @@ return(
        padding: 10,
        marginTop:100
      },
+     input2: {
+      height: 40,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
+      marginTop:100
+    },
      margin:{
        marginTop:100
      },
