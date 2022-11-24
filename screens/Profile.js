@@ -24,7 +24,7 @@ const Profile = (props) => {
   useEffect(()=>{
     const getUserName = async ()=>{
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      const userName = await AsyncStorage.getItem('userName');
+      const userName = await AsyncStorage.getItem('userEmail');
       setCameraPermission(cameraPermission);
       setUserName(userName);
       await AsyncStorage.removeItem('profilePhoto')
