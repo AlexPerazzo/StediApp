@@ -27,7 +27,7 @@ const Profile = (props) => {
       const userName = await AsyncStorage.getItem('userEmail');
       setCameraPermission(cameraPermission);
       setUserName(userName);
-      await AsyncStorage.removeItem('profilePhoto')
+      // await AsyncStorage.removeItem('profilePhoto')
       const profilePhoto = await AsyncStorage.getItem('profilePhoto');
       setProfilePhoto(profilePhoto);
 
