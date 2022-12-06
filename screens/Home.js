@@ -18,13 +18,15 @@ const Home = (props) => {
 //today score
 const todayScore = async() =>{
   const sessionToken = await AsyncStorage.getItem('sessionToken')
+  token.current = sessionToken
   let scoreObject ={};
   try{
 
 const userEmail = await AsyncStorage.getItem('userEmail');
+  console.log('email:', userEmail)
 
  token.current = await AsyncStorage.getItem('sessionToken');
-    const scoreResponse = await fetch('https://dev.stedi.me/riskscore/', + userEmail,{
+    const scoreResponse = await fetch('https://dev.stedi.me/riskscore/' + userEmail,{
     method:'GET',
     headers:{
       'Content-Type': 'application/json',
@@ -36,7 +38,7 @@ const userEmail = await AsyncStorage.getItem('userEmail');
   setScore(scoreObject.score);
   console.log(scoreObject.score);
   }catch(error){
-    console.log('error', error);
+    console.log('homeerror', error);
    }
 }
 
